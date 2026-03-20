@@ -7,20 +7,24 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './app.html',
-  styleUrl: './app.css',
+  styleUrl: './app.css'
 })
 export class AppComponent {
   isLoggedIn = false;
   usuario = '';
   password = '';
 
-  nuevoNombre = '';
-  nuevoCargo = '';
-  idEdicion: number | null = null; // Para saber si estamos editando
+  // Variables para el Catálogo
+  nombreProd = '';
+  categoriaProd = '';
+  precioProd: number | null = null;
+  idEdicion: number | null = null;
 
-  empleados = [
-    { id: 1, nombre: 'Roberth Lagos', cargo: 'Coordinador / Dev', estado: 'Activo' },
-    { id: 2, nombre: 'Ana Martínez', cargo: 'Recursos Humanos', estado: 'Activo' },
+  // Lista inicial (Base de Datos simulada)
+  productos = [
+    { id: 1, nombre: 'Laptop Dell Inspiron', categoria: 'Electrónica', precio: 15500 },
+    { id: 2, nombre: 'Teclado Mecánico RGB', categoria: 'Accesorios', precio: 1200 },
+    { id: 3, nombre: 'Monitor 24" Full HD', categoria: 'Electrónica', precio: 4500 }
   ];
 
   login() {
@@ -31,47 +35,42 @@ export class AppComponent {
     }
   }
 
-  logout() {
-    this.isLoggedIn = false;
-  }
+  logout() { this.isLoggedIn = false; }
 
-  // Operación de CREAR y ACTUALIZAR (30% de la rúbrica)
-  guardarEmpleado() {
-    if (this.nuevoNombre === '' || this.nuevoCargo === '') {
-      alert('Llene los campos');
+  // CREAR Y ACTUALIZAR
+  guardarProducto() {
+    if (!this.nombreProd || !this.categoriaProd || !this.precioProd) {
+      alert('Complete todos los datos del producto');
       return;
     }
 
     if (this.idEdicion !== null) {
-      // ACTUALIZAR
-      const index = this.empleados.findIndex((e) => e.id === this.idEdicion);
-      this.empleados[index].nombre = this.nuevoNombre;
-      this.empleados[index].cargo = this.nuevoCargo;
+      const index = this.productos.findIndex(p => p.id === this.idEdicion);
+      this.productos[index] = { id: this.idEdicion, nombre: this.nombreProd, categoria: this.categoriaProd, precio: this.precioProd };
       this.idEdicion = null;
     } else {
-      // CREAR
-      const nuevo = {
-        id: this.empleados.length + 1,
-        nombre: this.nuevoNombre,
-        cargo: this.nuevoCargo,
-        estado: 'Activo',
-      };
-      this.empleados.push(nuevo);
+      const nuevo = { id: this.productos.length + 1, nombre: this.nombreProd, categoria: this.categoriaProd, precio: this.precioProd };
+      this.productos.push(nuevo);
     }
-    this.nuevoNombre = '';
-    this.nuevoCargo = '';
+    this.limpiar();
   }
 
-  // Subir datos al formulario para EDITAR
-  prepararEdicion(emp: any) {
-    this.idEdicion = emp.id;
-    this.nuevoNombre = emp.nombre;
-    this.nuevoCargo = emp.cargo;
+  prepararEdicion(prod: any) {
+    this.idEdicion = prod.id;
+    this.nombreProd = prod.nombre;
+    this.categoriaProd = prod.categoria;
+    this.precioProd = prod.precio;
   }
 
-  eliminarEmpleado(id: number) {
-    if (confirm('¿Desea eliminar este registro?')) {
-      this.empleados = this.empleados.filter((e) => e.id !== id);
+  eliminarProducto(id: number) {
+    if (confirm('¿Eliminar este producto del catálogo?')) {
+      this.productos = this.productos.filter(p => p.id !== id);
     }
+  }
+
+  limpiar() {
+    this.nombreProd = '';
+    this.categoriaProd = '';
+    this.precioProd = null;
   }
 }

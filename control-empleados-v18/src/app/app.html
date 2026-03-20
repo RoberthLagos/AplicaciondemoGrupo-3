@@ -1,48 +1,60 @@
 @if (!isLoggedIn) {
   <div style="height: 100vh; display: flex; align-items: center; justify-content: center; background: #001a33; font-family: sans-serif;">
     <div style="background: white; padding: 40px; border-radius: 10px; width: 300px; text-align: center;">
-      <h2 style="color: #003366;">Login | UTH</h2>
-      <input type="text" [(ngModel)]="usuario" placeholder="Usuario" style="width: 100%; padding: 10px; margin-bottom: 10px;">
-      <input type="password" [(ngModel)]="password" placeholder="Contraseña" style="width: 100%; padding: 10px; margin-bottom: 20px;">
-      <button (click)="login()" style="width: 100%; padding: 10px; background: #003366; color: white; border: none; cursor: pointer;">ENTRAR</button>
+      <h2 style="color: #003366;">Catálogo | UTH</h2>
+      <input type="text" [(ngModel)]="usuario" placeholder="Usuario" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ddd;">
+      <input type="password" [(ngModel)]="password" placeholder="Contraseña" style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ddd;">
+      <button (click)='login()' style="width: 100%; padding: 10px; background: #003366; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">INGRESAR AL PANEL</button>
     </div>
   </div>
 } @else {
-  <nav style="background: #003366; color: white; padding: 15px; display: flex; justify-content: space-between;">
-    <b>Sistema de Control | Grupo #3</b>
-    <button (click)="logout()" style="background: #cc0000; color: white; border: none; padding: 5px 10px; cursor: pointer;">Salir</button>
+  <nav style="background: #003366; color: white; padding: 15px 30px; display: flex; justify-content: space-between; align-items: center;">
+    <div style="font-weight: bold; font-size: 1.2em;">📦 Gestión de Catálogo - Grupo #3</div>
+    <button (click)="logout()" style="background: #cc0000; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">Cerrar Sesión</button>
   </nav>
 
-  <div style="padding: 20px; font-family: sans-serif; background: #f4f7f6; min-height: 100vh;">
-    <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-      <h3 style="color: #003366;">{{ idEdicion ? 'Actualizar Empleado' : 'Nuevo Empleado' }}</h3>
+  <div style="padding: 30px; font-family: sans-serif; background: #f4f7f6; min-height: 100vh;">
+    <div style="background: white; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+      <h2 style="color: #003366; border-bottom: 2px solid #eee; padding-bottom: 10px;">{{ idEdicion ? 'Actualizar Producto' : 'Registrar Nuevo Producto' }}</h2>
 
-      <div style="display: flex; gap: 10px; margin-bottom: 20px; background: #eee; padding: 15px; border-radius: 5px;">
-        <input type="text" [(ngModel)]="nuevoNombre" placeholder="Nombre" style="padding: 8px; flex: 1;">
-        <input type="text" [(ngModel)]="nuevoCargo" placeholder="Cargo" style="padding: 8px; flex: 1;">
-        <button (click)="guardarEmpleado()" [style.background]="idEdicion ? '#007bff' : '#28a745'" style="color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer;">
-          {{ idEdicion ? 'Actualizar Datos' : '+ Guardar' }}
+      <div style="background: #e9ecef; padding: 20px; border-radius: 8px; margin-bottom: 25px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+        <div style="flex: 2;">
+          <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Nombre del Producto:</label>
+          <input type="text" [(ngModel)]="nombreProd" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <div style="flex: 1;">
+          <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Categoría:</label>
+          <input type="text" [(ngModel)]="categoriaProd" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <div style="flex: 1;">
+          <label style="display: block; font-size: 12px; font-weight: bold; margin-bottom: 5px;">Precio (L.):</label>
+          <input type="number" [(ngModel)]="precioProd" style="width: 100%; padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        </div>
+        <button (click)="guardarProducto()" [style.background]="idEdicion ? '#007bff' : '#28a745'" style="color: white; border: none; padding: 12px 25px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+          {{ idEdicion ? 'Actualizar' : 'Añadir' }}
         </button>
       </div>
 
       <table style="width: 100%; border-collapse: collapse;">
         <thead>
         <tr style="background: #003366; color: white; text-align: left;">
-          <th style="padding: 12px;">ID</th>
-          <th style="padding: 12px;">Nombre</th>
-          <th style="padding: 12px;">Cargo</th>
-          <th style="padding: 12px;">Acciones</th>
+          <th style="padding: 15px;">ID</th>
+          <th style="padding: 15px;">Producto</th>
+          <th style="padding: 15px;">Categoría</th>
+          <th style="padding: 15px;">Precio</th>
+          <th style="padding: 15px;">Acciones</th>
         </tr>
         </thead>
         <tbody>
-          @for (emp of empleados; track emp.id) {
-            <tr style="border-bottom: 1px solid #ddd;">
-              <td style="padding: 12px;">#{{emp.id}}</td>
-              <td style="padding: 12px;"><b>{{emp.nombre}}</b></td>
-              <td style="padding: 12px;">{{emp.cargo}}</td>
-              <td style="padding: 12px;">
-                <button (click)="prepararEdicion(emp)" style="color: #007bff; border: none; background: none; cursor: pointer; font-weight: bold; margin-right: 10px;">Editar</button>
-                <button (click)="eliminarEmpleado(emp.id)" style="color: #dc3545; border: none; background: none; cursor: pointer; font-weight: bold;">Borrar</button>
+          @for (p of productos; track p.id) {
+            <tr style="border-bottom: 1px solid #eee; transition: 0.3s;" onmouseover="this.style.backgroundColor='#f1f1f1'" onmouseout="this.style.backgroundColor='transparent'">
+              <td style="padding: 15px;">#{{p.id}}</td>
+              <td style="padding: 15px; font-weight: bold;">{{p.nombre}}</td>
+              <td style="padding: 15px;"><span style="background: #ddd; padding: 3px 8px; border-radius: 10px; font-size: 12px;">{{p.categoria}}</span></td>
+              <td style="padding: 15px; color: #28a745; font-weight: bold;">L. {{p.precio}}</td>
+              <td style="padding: 15px;">
+                <button (click)="prepararEdicion(p)" style="color: #007bff; border: none; background: none; cursor: pointer; font-weight: bold; margin-right: 15px;">Editar</button>
+                <button (click)="eliminarProducto(p.id)" style="color: #dc3545; border: none; background: none; cursor: pointer; font-weight: bold;">Borrar</button>
               </td>
             </tr>
           }
