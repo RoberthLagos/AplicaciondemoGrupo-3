@@ -10,7 +10,7 @@
  
  Lenguaje: TypeScript.
  
- Estilos: CSS3 nativo (Flexbox para diseño responsivo).
+ Estilos: CSS nativo (Flexbox para diseño responsivo).
  
  📋 Requisitos e InstalaciónPara ejecutar este proyecto localmente, asegúrate de tener instalado Node.js y npm.
  
